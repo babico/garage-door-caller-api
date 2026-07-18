@@ -8,9 +8,22 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN mkdir -p /root/.android && \
     openssl genrsa -out /root/.android/adbkey 4096 && \
-    openssl rsa -in /root/.android/adbkey -pubout -out /root/.android/adbkey.pub && \
-    echo " @adb" >> /root/.android/adbkey.pub && \
+    python3 -c "
+import base64, re, struct, subprocess
+mod_hex = subprocess.check_output(['openssl', 'rsa', '-in', '/root/.android/adbkey', '-noout', '-modulus']).decode().split('=')[1].strip()
+if len(mod_hex) % 2: mod_hex = '0' + mod_hex
+mod = bytes.fromhex(mod_hex)
+text = subprocess.check_output(['openssl', 'rsa', '-in', '/root/.android/adbkey', '-text', '-noout']).decode()
+m = re.search(r'publicExponent:\s*(\d+)', text)
+e_int = int(m.group(1))
+exp = e_int.to_bytes((e_int.bit_length() + 7) // 8, 'big')
+pub = struct.pack('<I', len(mod)) + mod + struct.pack('<I', len(exp)) + exp
+with open('/root/.android/adbkey.pub', 'w') as f:
+    f.write(base64.b64encode(pub).decode() + ' unknown@unknown\n')
+" && \
     printf "0x12d1\n0x04e8\n0x18d1\n0x22b8\n0x2717\n0x2a70\n0x0bb4\n0x1004\n0x05c6\n0x17ef\n" > /root/.android/adb_usb.ini
+
+ENV ADB_VENDOR_KEYS=/root/.android
 
 WORKDIR /app
 

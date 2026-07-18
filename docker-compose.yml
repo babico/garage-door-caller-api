@@ -21,6 +21,7 @@ services:
       start_period: '10s'
       timeout: '10s'
     environment:
+      - 'ADB_VENDOR_KEYS=/root/.android'
       - 'CONFIG_PATH=/app/config/phones.yaml'
       - 'DOOR_CODE=${DOOR_CODE:-4}'
       - 'PHONE_SERIAL=${PHONE_SERIAL:-qwerty123456qwerty123456}'
