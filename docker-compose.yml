@@ -28,7 +28,6 @@ services:
       - 'WAIT_AFTER_DIAL_S=${WAIT_AFTER_DIAL_S:-16}'
     volumes:
       - './config:/app/config:ro'
-      - '~/.android:/root/.android:ro'
     devices:
       - '/dev/bus/usb:/dev/bus/usb'
     privileged: true
