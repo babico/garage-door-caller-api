@@ -27,14 +27,26 @@ class PhoneConfigLoader:
     def __init__(self, path: str):
         if not os.path.exists(path):
             raise FileNotFoundError(f"Config file not found: {path}")
-        with open(path) as f:
-            raw = yaml.safe_load(f) or {}
+        self._path = path
+        self._mtime: float = 0
         self._configs: dict[str, PhoneConfig] = {}
+        self._reload()
+
+    def _reload(self) -> None:
+        with open(self._path) as f:
+            raw = yaml.safe_load(f) or {}
+        self._configs = {}
         raw_serials = raw.get("serials") or {}
         for serial, data in raw_serials.items():
             self._configs[serial] = PhoneConfig(**data)
+        self._mtime = os.path.getmtime(self._path)
 
     def get(self, serial: str) -> Optional[PhoneConfig]:
+        try:
+            if os.path.getmtime(self._path) != self._mtime:
+                self._reload()
+        except OSError:
+            pass
         return self._configs.get(serial)
 
     def list_serials(self) -> list[str]:
