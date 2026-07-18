@@ -209,6 +209,29 @@ docker-compose up -d
 
 Requires `privileged: true` and USB passthrough for ADB device access.
 
+### Reverse Proxy
+
+```nginx
+server {
+    listen 443 ssl;
+    server_name garage.example.com;
+
+    location / {
+        proxy_pass http://192.168.21.2:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+Or Caddy:
+
+```caddy
+garage.example.com {
+    reverse_proxy 192.168.21.2:8000
+}
+```
+
 ### Tests
 
 ```bash
