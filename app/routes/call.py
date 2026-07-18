@@ -37,10 +37,12 @@ def call_garage(request: Request):
         )
 
     devices = adb.get_devices()
-    if not devices:
-        return _error(503, "DEVICE_NOT_FOUND", "No ADB device connected")
-
-    serial = list(devices.keys())[0]
+    serial = settings.PHONE_SERIAL
+    if serial not in devices:
+        return _error(
+            503, "DEVICE_NOT_FOUND",
+            f"Device '{serial}' not connected",
+        )
     if devices[serial] != "device":
         return _error(
             503, "DEVICE_UNAUTHORIZED",

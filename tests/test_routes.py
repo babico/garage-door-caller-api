@@ -23,7 +23,6 @@ def mock_settings():
     s.CONFIG_PATH = "config/phones.yaml"
     s.ADB_PATH = "adb"
     s.WAIT_AFTER_DIAL_S = 0
-    s.ADB_DEVICE = "auto"
     return s
 
 
@@ -38,7 +37,7 @@ def mock_loader():
 @pytest.fixture
 def mock_adb():
     adb = MagicMock()
-    adb.get_devices.return_value = {"HVY": "device"}
+    adb.get_devices.return_value = {"qwerty123456qwerty123456": "device"}
     adb.detect_model.return_value = "SNE-LX1"
     return adb
 
@@ -114,8 +113,7 @@ class TestCallEndpoint:
         assert data["error"] == "DEVICE_NOT_FOUND"
 
     def test_call_device_unauthorized(self, mock_settings, mock_loader, mock_adb):
-        from app.adb_service import DeviceUnauthorizedError
-        mock_adb.execute_workflow.side_effect = DeviceUnauthorizedError("unauthorized")
+        mock_adb.get_devices.return_value = {"qwerty123456qwerty123456": "unauthorized"}
         app = _make_app(mock_settings, mock_loader, mock_adb)
         client = TestClient(app)
         resp = client.post("/call")

@@ -14,7 +14,6 @@ class TestSettings:
         assert s.PHONE_SERIAL == "qwerty123456qwerty123456"
         assert s.CONFIG_PATH == "config/phones.yaml"
         assert s.ADB_PATH == "adb"
-        assert s.ADB_DEVICE == "auto"
 
     def test_missing_phone_number_raises(self, monkeypatch):
         monkeypatch.setenv("DOOR_CODE", "4")

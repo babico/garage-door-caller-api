@@ -74,11 +74,10 @@ adb devices
 | ------------------- | -------- | -------------------- | ----------------------------------- |
 | `PHONE_NUMBER`      | YES      | —                    | Garage door phone number            |
 | `DOOR_CODE`         | YES      | —                    | Digits to type (e.g. `*`, `4`)      |
-| `PHONE_SERIAL`      | YES      | —                    | Serial lookup key in phones.yaml    |
+| `PHONE_SERIAL`      | YES      | —                    | ADB device serial + phones.yaml key |
 | `WAIT_AFTER_DIAL_S` | NO       | `0`                  | Seconds to wait after dialing       |
 | `CONFIG_PATH`       | NO       | `config/phones.yaml` | Path to phone config YAML           |
 | `ADB_PATH`          | NO       | `adb`                | Path to adb binary                  |
-| `ADB_DEVICE`        | NO       | `auto`               | Device serial (auto = first device) |
 
 ## Phone Config (config/phones.yaml)
 

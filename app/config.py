@@ -15,7 +15,6 @@ class Settings:
         self.CONFIG_PATH = os.getenv("CONFIG_PATH", "config/phones.yaml")
         self.ADB_PATH = os.getenv("ADB_PATH", "adb")
         self.WAIT_AFTER_DIAL_S = int(os.getenv("WAIT_AFTER_DIAL_S", "0"))
-        self.ADB_DEVICE = os.getenv("ADB_DEVICE", "auto")
 
     def _require(self, name: str) -> str:
         val = os.getenv(name)
