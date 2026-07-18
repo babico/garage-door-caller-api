@@ -60,10 +60,6 @@ class AdbService:
         return ["-s", serial]
 
     def ensure_daemon(self) -> bool:
-        try:
-            self._run([self._adb_path, "kill-server"])
-        except Exception:
-            pass
         self._run([self._adb_path, "start-server"])
         return True
 

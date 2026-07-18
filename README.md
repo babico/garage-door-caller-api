@@ -29,37 +29,6 @@ Recommended setup:
 | Power     | Phone plugged into host USB (keeps charged)          |
 | ADB       | Run `adb devices` after each phone reboot to confirm |
 
-### Linux: Find Exact USB Device for Docker
-
-Docker needs the phone's USB bus path for `devices:` passthrough. The generic `/dev/bus/usb:/dev/bus/usb` in `docker-compose.yml` passes ALL USB devices — fine for single-device setups. For more precision (e.g., multiple USB devices):
-
-```bash
-# 1. List USB devices with vendor/product IDs
-lsusb
-
-# Example output:
-# Bus 001 Device 004: ID 12d1:107e Huawei Technologies Co., Ltd.
-
-# 2. Find the exact /dev/bus/usb node
-ls -l /dev/bus/usb/001/
-
-# Example:
-# crw-rw-r-- 1 root root 189, 3 Jul 18 12:00 004
-
-# 3. Confirm it's the phone by matching the device number from lsusb
-#    Device 004 on Bus 001 → /dev/bus/usb/001/004
-
-# 4. Use in docker-compose.yml (replace with your bus/device):
-#    devices:
-#      - /dev/bus/usb/001/004:/dev/bus/usb/001/004
-```
-
-To find the phone's vendor ID quickly:
-
-```bash
-lsusb | grep -iE "huawei|samsung|xiaomi|oneplus|google|motorola|lg|sony|oppo|vivo"
-```
-
 After connecting the phone, verify ADB sees it:
 
 ```bash
@@ -127,8 +96,6 @@ garage-door-caller/
 ├── tests/                   # 64 tests (pytest)
 ├── .env.example             # Required env var template
 ├── requirements.txt
-├── Dockerfile
-├── docker-compose.yml
 └── .gitignore
 ```
 
@@ -200,14 +167,6 @@ pip install -r requirements.txt
 # Run
 uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
-
-### Docker
-
-```bash
-docker-compose up -d
-```
-
-Requires `privileged: true` and USB passthrough for ADB device access.
 
 ### Reverse Proxy
 
