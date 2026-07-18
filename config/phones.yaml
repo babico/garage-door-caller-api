@@ -1,0 +1,11 @@
+serials:
+  qwerty123456qwerty123456:
+    manufacturer: HUAWEI
+    wake_up: true
+    phone_pin: "123456"
+    keypad_tap:
+      x: 228
+      y: 1937
+    screen:
+      width: 1080
+      height: 2340
