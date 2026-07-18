@@ -7,7 +7,6 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - ADB_DEVICE=${ADB_DEVICE:-auto}
       - CONFIG_PATH=/app/config/phones.yaml
       - DOOR_CODE=${DOOR_CODE:-4}
       - PHONE_SERIAL=${PHONE_SERIAL:-qwerty123456qwerty123456}
